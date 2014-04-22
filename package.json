@@ -1,0 +1,22 @@
+{
+  "name": "dumper",
+  "version": "0.0.0",
+  "description": "Interactive Data::Dumper",
+  "main": "lib/dumper.coffee",
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-coffeelint": "~0.0.10",
+    "grunt-contrib-coffee": "~0.10.1",
+    "grunt-contrib-sass": "~0.7.3",
+    "matchdep": "~0.3.0",
+    "grunt-contrib-watch": "~0.6.1"
+  },
+  "keywords": [
+    "dumper",
+    "Data::Dumper",
+    "Template",
+    "Toolkit"
+  ],
+  "author": "Vadim Sikora",
+  "license": "MIT"
+}
