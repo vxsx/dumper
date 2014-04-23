@@ -40,22 +40,28 @@ developers only!
         font-size: 30px;
         content: attr(data-dumper);
     }
-
 }
-    $pad: 50px;
+    $pad: 4em;
 
     .dumper__item {
-        margin-left: $pad;
+        /* margin-left: $pad; */
         position: relative;
     }
         .dumper__item_state_closed {
-            display: inline;
-            margin-left: 0px;
-            position: static;
+            /* display: inline; */
+            /* margin-left: 0px; */
+            /* position: static; */
+        }
+        .dumper__item_state_hovered {
         }
         .dumper__item-i {
+            margin-left: $pad;
+            /* display: inline-block; */
             .dumper__item_state_closed & {
                 display: none;
+            }
+            .dumper__item_state_hovered > & {
+                outline: 1px dashed;
             }
         }
         .dumper__ellipsis {
@@ -69,22 +75,21 @@ developers only!
         .dumper__toggle {
             cursor: pointer;
             position: absolute;
-            width: 16px;
-            height: 16px;
-            line-height: 16px;
-            background: white;
+            width: 1em;
+            height: 1em;
+            line-height: 1em;
+            /* background: white; */
             border: 1px solid;
-            margin-top: -20px;
-            margin-left: -$pad - 20px;
+            /* margin-top: -1.3em; */
+            /* top: 0; */
+            left: 0;
+            margin-left: -1.5em;
             text-align: center;
             &:before {
                 content: '-';
             }
 
             .dumper__item_state_closed & {
-                margin-top: -1px;
-                /* margin-left: -20px; */
-                margin-left: -$pad - 26px;
                 &:before {
                     content: '+';
                 }

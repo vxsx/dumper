@@ -14,27 +14,39 @@ class Dumper
 
     Array::forEach.call @elemContent.querySelectorAll('.dumper__toggle'), (elem) =>
       elem.addEventListener 'click', @toggleBlock.bind this
+      elem.addEventListener 'mouseover', @toggleHover.bind this
+      elem.addEventListener 'mouseout', @toggleHover.bind this
 
   parseData: (data) ->
     return data
       #dumb hack shit
-      .replace(/\" sub {/, '"')
+      .replace /^(.*)/g, "\n$1"
+      .replace /\{\}/g, '{\n}'
+      # .replace /\{(.*)\}/g, '{\n$1\n}'
+      .replace /\" sub {/, '"'
       #arrays
-      .replace /\[(\s*)\n/g, "[<div class='dumper__array dumper__item'>#{toggleTmpl}#{ellipsis}<div class='dumper__item-i'>"
-      .replace /\n(\s*)\]/g, "</div></div>$1]"
+      .replace /(.*)\[(.*)/g, "\n<div class='dumper__array dumper__item'>$1<b>[</b>$2#{toggleTmpl}#{ellipsis}<div class='dumper__item-i'>\n"
+      .replace /(.*)\](.*)/g, "\n</div>$1<b>]</b>$2</div>\n"
       #objects
-      .replace /\{(\s*)\n/g, "{<div class='dumper__object dumper__item'>#{toggleTmpl}#{ellipsis}<div class='dumper__item-i'>"
-      .replace /\n(\s*)\}/g, "</div></div>$1}"
+      .replace /(.*)\{(.*)/g, "\n<div class='dumper__object dumper__item'>$1<b>{</b>$2#{toggleTmpl}#{ellipsis}<div class='dumper__item-i'>\n"
+      .replace /(.*)\}(.*)/g, "\n</div>$1<b>}</b>$2</div>\n"
       #clean whitespace
       .replace /[^\n\S]{2,}/g, ""
+      .replace /\s{2,}/g, ""
+
+    #TODO clear empty divs
 
   toggleBlock: (e) ->
     e.preventDefault()
     e.stopPropagation()
-
     clicked = e.target
-    console.log clicked.parentNode
     clicked.parentNode.classList.toggle 'dumper__item_state_closed'
+
+  toggleHover: (e) ->
+    e.preventDefault()
+    e.stopPropagation()
+    hovered = e.target
+    hovered.parentNode.classList.toggle 'dumper__item_state_hovered'
 
 window.dumper = new Dumper(elem) for elem in document.querySelectorAll ".dumper"
 
