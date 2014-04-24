@@ -29,8 +29,8 @@ developers only!
     z-index: 9999;
     min-height: 40px;
     padding-left: 35px;
-
     background-color: #eee;
+    border-radius: 3px;
 
     &:after {
         color: #444;
@@ -41,23 +41,17 @@ developers only!
         content: attr(data-dumper);
     }
 }
-    $pad: 4em;
+    $pad: 3em;
 
     .dumper__item {
-        /* margin-left: $pad; */
         position: relative;
+        display: table;
+        padding: 0px 3px;
 
         &.dumper__item_state_hovered {
-            outline: 1px dashed;
+            outline: 1px dashed #a0a0a0;
         }
     }
-        .dumper__item_state_closed {
-            /* display: inline; */
-            /* margin-left: 0px; */
-            /* position: static; */
-        }
-        .dumper__item_state_hovered {
-        }
         .dumper__item-i {
             margin-left: $pad;
             /* display: inline-block; */
@@ -85,10 +79,8 @@ developers only!
             width: 1em;
             height: 1em;
             line-height: 1em;
-            /* background: white; */
             border: 1px solid;
-            /* margin-top: -1.3em; */
-            /* top: 0; */
+            top: 2px;
             left: 0;
             margin-left: -1.5em;
             text-align: center;
