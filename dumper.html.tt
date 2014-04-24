@@ -1,0 +1,21 @@
+[%# you have to define your own is_admin obviously %]
+[% is_admin = c.is_user_authenticated() && c.current_user.is_admin %]
+[% IF c.app.mode == 'development' && c.param('dump') || is_admin && c.param('dump') %]
+    [% USE Dumper %]
+    [% _dump_param = c.param('dump') %]
+    [% FOREACH dump IN _dump_param.split(',') %]
+        [% IF dump == '1' %]
+<div class="dumper">
+<pre class="dumper__i" data-dumper="c.stash">
+[% Dumper.dump(c.stash) %]
+</pre>
+</div>
+        [% ELSE %]
+<div class="dumper">
+<pre class="dumper__i" data-dumper="[% dd %]">
+[% Dumper.dump($dd) %]
+</pre>
+</div>
+        [% END %]
+    [% END %]
+[% END %]
