@@ -1,5 +1,11 @@
-toggleTmpl = '<span class="dumper__toggle"></span>'
-ellipsis = '<span class="dumper__ellipsis">...</span>'
+openingTmpl = (bracket) ->
+  "\n<div class='dumper__array dumper__item'>$1<b>#{bracket}</b>$2<span class='dumper__toggle'></span><span class='dumper__ellipsis'>...</span><div class='dumper__item-i'>\n"
+
+closingTmpl = (bracket) ->
+  "\n</div>$1<b>#{bracket}</b>$2</div>\n"
+
+$ = (selector, root) ->
+  Array::slice.call ((root || document).querySelectorAll selector), 0
 
 class Dumper
   constructor: (@elem) ->
@@ -12,41 +18,43 @@ class Dumper
   buildUI: ->
     @elemContent.innerHTML = @data
 
-    Array::forEach.call @elemContent.querySelectorAll('.dumper__toggle'), (elem) =>
-      elem.addEventListener 'click', @toggleBlock.bind this
-      elem.addEventListener 'mouseover', @toggleHover.bind this
-      elem.addEventListener 'mouseout', @toggleHover.bind this
+    #bind listeners
+    $('.dumper__toggle', @elemContent).forEach (elem) =>
+      elem.addEventListener 'click', this
+      elem.addEventListener 'mouseover', this
+      elem.addEventListener 'mouseout', this
+
+    #empty arrays shouldn't bother us
+    $('.dumper__item-i', @elemContent).forEach (elem) ->
+      if !elem.innerHTML then elem.parentNode.classList.add 'dumper__item_empty'
 
   parseData: (data) ->
     return data
       #dumb hack shit
       .replace /^(.*)/g, "\n$1"
       .replace /\{\}/g, '{\n}'
-      # .replace /\{(.*)\}/g, '{\n$1\n}'
+      .replace /\[\]/g, '[\n]'
       .replace /\" sub {/, '"'
       #arrays
-      .replace /(.*)\[(.*)/g, "\n<div class='dumper__array dumper__item'>$1<b>[</b>$2#{toggleTmpl}#{ellipsis}<div class='dumper__item-i'>\n"
-      .replace /(.*)\](.*)/g, "\n</div>$1<b>]</b>$2</div>\n"
+      .replace /(.*)\[(.*)/g, openingTmpl '['
+      .replace /(.*)\](.*)/g, closingTmpl ']'
       #objects
-      .replace /(.*)\{(.*)/g, "\n<div class='dumper__object dumper__item'>$1<b>{</b>$2#{toggleTmpl}#{ellipsis}<div class='dumper__item-i'>\n"
-      .replace /(.*)\}(.*)/g, "\n</div>$1<b>}</b>$2</div>\n"
+      .replace /(.*)\{(.*)/g, openingTmpl '{'
+      .replace /(.*)\}(.*)/g, closingTmpl '}'
       #clean whitespace
       .replace /[^\n\S]{2,}/g, ""
       .replace /\s{2,}/g, ""
 
-    #TODO clear empty divs
 
-  toggleBlock: (e) ->
+  handleEvent: (e) ->
     e.preventDefault()
     e.stopPropagation()
-    clicked = e.target
-    clicked.parentNode.classList.toggle 'dumper__item_state_closed'
+    switch e.type
+      when 'mouseout', 'mouseover' then @toggleItemState e.target, 'hovered'
+      when 'click' then @toggleItemState e.target, 'closed'
 
-  toggleHover: (e) ->
-    e.preventDefault()
-    e.stopPropagation()
-    hovered = e.target
-    hovered.parentNode.classList.toggle 'dumper__item_state_hovered'
+  toggleItemState: (target, state) ->
+    target.parentNode.classList.toggle "dumper__item_state_#{state}"
 
 window.dumper = new Dumper(elem) for elem in document.querySelectorAll ".dumper"
 

@@ -46,6 +46,10 @@ developers only!
     .dumper__item {
         /* margin-left: $pad; */
         position: relative;
+
+        &.dumper__item_state_hovered {
+            outline: 1px dashed;
+        }
     }
         .dumper__item_state_closed {
             /* display: inline; */
@@ -60,8 +64,8 @@ developers only!
             .dumper__item_state_closed & {
                 display: none;
             }
-            .dumper__item_state_hovered > & {
-                outline: 1px dashed;
+            .dumper__item_empty & {
+                display: none;
             }
         }
         .dumper__ellipsis {
@@ -69,6 +73,9 @@ developers only!
             .dumper__item_state_closed & {
                 display: inline;
                 background-color: #ccc;
+            }
+            .dumper__item_empty & {
+                display: none;
             }
         }
 
@@ -93,5 +100,8 @@ developers only!
                 &:before {
                     content: '+';
                 }
+            }
+            .dumper__item_empty & {
+                display: none;
             }
         }
