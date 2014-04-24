@@ -64,7 +64,7 @@
       target.parentNode.classList.toggle "dumper__item_state_#{state}"
 
   #auto init
-  new Dumper(elem) for elem in document.querySelectorAll ".dumper"
+  new Dumper(elem) for elem in $ ".dumper"
 
   return Dumper
 
