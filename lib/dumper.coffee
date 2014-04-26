@@ -11,31 +11,47 @@
   closingTmpl = (bracket) ->
     "\n</div>$1<b>#{bracket}</b>$2</div>\n"
 
+  controlsTmpl = ->
+    '<a href="#" class="dumper__control dumper__collapse-all">Collapse all</a> <a href="#" class="dumper__control dumper__expand-all">Expand all</a> '
+
   $ = (selector, root) ->
     Array::slice.call ((root || document).querySelectorAll selector), 0
 
   class Dumper
     constructor: (@elem) ->
       @elemContent = @elem.querySelector '.dumper__i'
-      @rawData = @elemContent.innerText
-      @data = @parseData @rawData
+      @rawData = @elemContent.textContent
+      @data = @formatData @rawData
 
       @buildUI()
+      @bindEvents()
 
     buildUI: ->
+      #formatted data
       @elemContent.innerHTML = @data
 
-      #bind listeners
-      $('.dumper__toggle', @elemContent).forEach (elem) =>
-        elem.addEventListener 'click', this
-        elem.addEventListener 'mouseover', this
-        elem.addEventListener 'mouseout', this
+      #controls
+      @controlsWrap = document.createElement 'div'
+      @controlsWrap.className = 'dumper__controls'
+      @controlsWrap.innerHTML = controlsTmpl()
+      @elemContent.insertBefore @controlsWrap, @elemContent.firstChild
 
       #empty arrays shouldn't bother us
-      $('.dumper__item-i', @elemContent).forEach (elem) ->
-        if !elem.innerHTML then elem.parentNode.classList.add 'dumper__item_empty'
+      (elem.parentNode.classList.add('dumper__item_empty') if !elem.innerHTML) for elem in $('.dumper__item-i', @elemContent)
 
-    parseData: (data) ->
+    bindEvents: ->
+      #bind listeners
+      (
+        elem.addEventListener('click', this)
+        elem.addEventListener('mouseover', this)
+        elem.addEventListener('mouseout', this)
+      ) for elem in $('.dumper__toggle', @elemContent)
+
+      $('.dumper__expand-all', @elemContent)[0].addEventListener 'click', @expandAll.bind this
+      $('.dumper__collapse-all', @elemContent)[0].addEventListener 'click', @collapseAll.bind this
+
+
+    formatData: (data) ->
       return data
         #dumb hack shit
         .replace /^(.*)/g, "\n$1"
@@ -60,8 +76,23 @@
         when 'mouseout', 'mouseover' then @toggleItemState e.target, 'hovered'
         when 'click' then @toggleItemState e.target, 'closed'
 
+    expandAll: (e) ->
+      e.preventDefault()
+      #dont close/open first level
+      @expandItem item for item in $('.dumper__item').slice 1
+
+    collapseAll: (e) ->
+      e.preventDefault()
+      @collapseItem item for item in $('.dumper__item').slice 1
+
     toggleItemState: (target, state) ->
       target.parentNode.classList.toggle "dumper__item_state_#{state}"
+
+    collapseItem: (target) ->
+      target.classList.add "dumper__item_state_closed"
+
+    expandItem: (target) ->
+      target.classList.remove "dumper__item_state_closed"
 
   #auto init
   new Dumper(elem) for elem in $ ".dumper"
