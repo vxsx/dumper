@@ -79,11 +79,11 @@
     expandAll: (e) ->
       e.preventDefault()
       #dont close/open first level
-      @expandItem item for item in $('.dumper__item').slice 1
+      @expandItem item for item in $('.dumper__item', @elem).slice 1
 
     collapseAll: (e) ->
       e.preventDefault()
-      @collapseItem item for item in $('.dumper__item').slice 1
+      @collapseItem item for item in $('.dumper__item', @elem).slice 1
 
     toggleItemState: (target, state) ->
       target.parentNode.classList.toggle "dumper__item_state_#{state}"
