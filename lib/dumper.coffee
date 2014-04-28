@@ -1,6 +1,6 @@
 ((root, factory) ->
   if typeof define is "function" and define.amd
-    define 'dumper', factory
+    define factory
   else
     root.Dumper = factory()
   return
