@@ -6,7 +6,7 @@
   return
 ) this, ->
   openingTmpl = (bracket) ->
-    "\n<div class='dumper__array dumper__item'>$1<b>#{bracket}</b>$2<span class='dumper__toggle'></span><span class='dumper__ellipsis'>...</span><div class='dumper__item-i'>\n"
+    "\n<div class='dumper__item'>$1<b>#{bracket}</b>$2<span class='dumper__toggle'></span><span class='dumper__ellipsis'>...</span><div class='dumper__item-i'>\n"
 
   closingTmpl = (bracket) ->
     "\n</div>$1<b>#{bracket}</b>$2</div>\n"
