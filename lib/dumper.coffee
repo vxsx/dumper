@@ -55,8 +55,13 @@
       return data
         #dumb hack shit
         .replace /^(.*)/g, "\n$1"
+        #empty hashes and arrays
         .replace /\{\}/g, '{\n}'
         .replace /\[\]/g, '[\n]'
+        #for people who dump unencoded json strings
+        .replace /\{(.*)\}/g, '{\n$1\n}'
+        .replace /\[(.*)\]/g, '[\n$1\n]'
+        #stupid sub
         .replace /\" sub {/, '"'
         #arrays
         .replace /(.*)\[(.*)/g, openingTmpl '['
