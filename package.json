@@ -8,8 +8,8 @@
     "grunt-coffeelint": "~0.0.10",
     "grunt-contrib-coffee": "~0.10.1",
     "grunt-contrib-sass": "~0.7.3",
-    "matchdep": "~0.3.0",
-    "grunt-contrib-watch": "~0.6.1"
+    "grunt-contrib-watch": "~0.6.1",
+    "load-grunt-tasks": "^0.4.0"
   },
   "keywords": [
     "dumper",
