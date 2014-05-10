@@ -73,13 +73,16 @@
         .replace /[^\n\S]{2,}/g, ""
         .replace /\s{2,}/g, ""
 
-
     handleEvent: (e) ->
       e.preventDefault()
       e.stopPropagation()
       switch e.type
-        when 'mouseout', 'mouseover' then @toggleItemState e.target, 'hovered'
-        when 'click' then @toggleItemState e.target, 'closed'
+        when 'mouseout', 'mouseover' then @toggleItemState e.target.parentNode, 'hovered'
+        when 'click'
+          if e.altKey
+            @toggleChildren e.target.parentNode
+          else
+            @toggleItemState e.target.parentNode, 'closed'
 
     expandAll: (e) ->
       e.preventDefault()
@@ -91,13 +94,22 @@
       @collapseItem item for item in $('.dumper__item', @elem).slice 1
 
     toggleItemState: (target, state) ->
-      target.parentNode.classList.toggle "dumper__item_state_#{state}"
+      target.classList.toggle "dumper__item_state_#{state}"
 
     collapseItem: (target) ->
       target.classList.add "dumper__item_state_closed"
 
     expandItem: (target) ->
       target.classList.remove "dumper__item_state_closed"
+
+    toggleChildren: (target) ->
+      elems = $('.dumper__item', target)
+      #first item open?
+      doWeClose = !elems[0].classList.contains 'dumper__item_state_closed'
+      if doWeClose
+        @collapseItem item for item in elems
+      else
+        @expandItem item for item in elems
 
   #auto init
   new Dumper(elem) for elem in $ ".dumper"
