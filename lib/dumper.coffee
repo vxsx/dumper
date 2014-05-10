@@ -77,12 +77,12 @@
       e.preventDefault()
       e.stopPropagation()
       switch e.type
-        when 'mouseout', 'mouseover' then @toggleItemState e.target.parentNode, 'hovered'
+        when 'mouseout', 'mouseover' then @toggleHover e.target.parentNode
         when 'click'
           if e.altKey
             @toggleChildren e.target.parentNode
           else
-            @toggleItemState e.target.parentNode, 'closed'
+            @toggleItem e.target.parentNode
 
     expandAll: (e) ->
       e.preventDefault()
@@ -93,8 +93,11 @@
       e.preventDefault()
       @collapseItem item for item in $('.dumper__item', @elem).slice 1
 
-    toggleItemState: (target, state) ->
-      target.classList.toggle "dumper__item_state_#{state}"
+    toggleHover: (target) ->
+      target.classList.toggle "dumper__item_state_hovered"
+
+    toggleItem: (target) ->
+      target.classList.toggle "dumper__item_state_closed"
 
     collapseItem: (target) ->
       target.classList.add "dumper__item_state_closed"
