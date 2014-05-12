@@ -46,6 +46,7 @@ developers only!
         position: relative;
         display: table;
         padding: 0px 3px;
+        margin-left: -3px;
 
         &.dumper__item_state_hovered {
             outline: 1px dashed #a0a0a0;
