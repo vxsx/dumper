@@ -55,14 +55,15 @@
       return data
         #dumb hack shit
         .replace /^(.*)/g, "\n$1"
+        #stupid sub
+        # .replace /\{\$\{/, '{'
+        .replace /\" sub {/, '"'
         #empty hashes and arrays
         .replace /\{\}/g, '{\n}'
         .replace /\[\]/g, '[\n]'
         #for people who dump unencoded json strings
-        .replace /\{(.*)\}/g, '{\n$1\n}'
-        .replace /\[(.*)\]/g, '[\n$1\n]'
-        #stupid sub
-        .replace /\" sub {/, '"'
+        .replace /\{([^}]*)\}/g, '{\n$1\n}'
+        .replace /\[([^]]*)\]/g, '[\n$1\n]'
         #arrays
         .replace /(.*)\[(.*)/g, openingTmpl '['
         .replace /(.*)\](.*)/g, closingTmpl ']'
@@ -70,7 +71,8 @@
         .replace /(.*)\{(.*)/g, openingTmpl '{'
         .replace /(.*)\}(.*)/g, closingTmpl '}'
         #clean whitespace
-        .replace /[^\n\S]{2,}/g, ""
+        .replace />\s</, "><"
+        # .replace /[^\n\S]{2,}/g, ""
         .replace /\s{2,}/g, ""
 
     handleEvent: (e) ->
