@@ -110,6 +110,10 @@
       elems = $('.dumper__item', target)
       #first item open?
       doWeClose = !elems[0].classList.contains 'dumper__item_state_closed'
+
+      #is the clicked item is closed then we open it
+      #otherwise there's no point
+      if target.classList.contains 'dumper__item_state_closed' then @toggleItem target
       if doWeClose
         @collapseItem item for item in elems
       else
