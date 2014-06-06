@@ -1,4 +1,11 @@
 
+0.2.1 / 2014-06-06
+==================
+
+ * small improvement for alt-clicks
+ * fixed a bug with oneline objects
+ * small styling adjust
+
 0.2.0 / 2014-05-10
 ==================
 
